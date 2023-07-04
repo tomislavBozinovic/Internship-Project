@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .header {
+      text-align: center;
+      font-weight: bold;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    .generatedOn {
+      text-align: right;
+      font-size: 10px;
+    }
+
+    .employee-info {
+      font-size: 10px;
+    }
+
+    .task-info {
+      font-size: 12px;
+    }
+
+    li {
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div>
+      <div class="employeeDetails">
+        <h2 class="header"> Employee Report </h2>
+        <p class="generatedOn">Generated on: <%= new Date().toLocaleDateString() %>
+        </p>
+      </div>
+      <hr>
+      <div>
+        <h4>Employee Information:</h4>
+        <div class="employee-info">
+          <p>Name: <%= employee.name %>
+          </p>
+          <p>Age: <%= employee.age %>
+          </p>
+          <p>Email: <%= employee.email %>
+          </p>
+          <p>Phone: <%= employee.phone %>
+          </p>
+          <p>Pet: <%= employee.pet %>
+          </p>
+        </div>
+        <hr>
+      </div>
+      <h4>Task Information:</h4>
+      <div class="task-info">
+        <ul>
+          <li>
+            Created: <%= employeeTasks.length %>
+          </li>
+          <li>
+            Completed: <%= completedTasks.length %>
+          </li>
+          <li>
+            Expired: <%= expiredNotCompleted.length %>
+          </li>
+          <li>
+            Active: <%= 
+              employeeTasks.length - completedTasks.length
+              - expiredNotCompleted.length %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

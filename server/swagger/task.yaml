@@ -1,0 +1,292 @@
+components:
+  schemas:
+    Task:
+      type: object
+      required:
+        - name
+        - employee
+        - deadline
+      properties:
+        _id:
+          type: string
+          description: The auto-generated id of the task
+        name:
+          type: string
+          description: The task name
+        employee:
+          type: string
+          description: The id of the employee who created the task
+        deadline:
+          type: string
+          description: The task deadline
+        completed:
+          type: boolean
+          description: Determinates if the task is completed
+        createdAt:
+          type: string
+          description: The auto-generated value (timestamps)
+        updatedAt:
+          type: string
+          description: The auto-generated value (timestamps)
+        __v:
+          type: integer
+          description: The versionKey auto-generated (mongoose)
+      example:
+        _id: 61a734180981fb44ede593d7
+        name: Test Task 1
+        employee: 61a7340e0981fb44ede593d2
+        deadline: '2021-12-01'
+        completed: 'false'
+        createdAt: '2021-12-02T13:49:20.168+00:00'
+        updatedAt: '2021-12-02T13:49:20.168+00:00'
+        __v: 0
+  responses:
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Something went wrong.
+tags:
+  name: Tasks
+  description: The task managing API
+'/task/{id}':
+  get:
+    summary: Returns the list of employee tasks
+    tags:
+      - Tasks
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          required: true
+          description: The employee id
+    responses:
+      '200':
+        description: The list of the tasks
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                totalResults: 1
+                tasks:
+                  - _id: 61b01bd0b3d751fd870ea32a
+                    name: Test Task 1
+                    employee:
+                      _id: 61af58d01ff9ff292094990d
+                      name: Ivo Ivic
+                      createdAt: '2021-12-07T12:51:28.529Z'
+                      updatedAt: '2021-12-07T12:51:28.529Z'
+                      __v: 0
+                    deadline: '2021-12-17'
+                    completed: 'false'
+                    createdAt: '2021-12-08T02:43:28.318Z'
+                    updatedAt: '2021-12-08T02:43:28.318Z'
+                    __v: 0
+                    isExpired: 'false'
+                    id: 61b01bd0b3d751fd870ea32a
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                errors:
+                  - value: id_12
+                    msg: Id is invalid. Try again.
+                    param: id
+                    location: params
+      '404':
+        description: Employee not found
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              message: Employee not found.
+      '500':
+        $ref: '#/components/responses/ServerError'
+  delete:
+    summary: Remove the task by id
+    tags:
+      - Tasks
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          required: true
+          description: The task id
+    responses:
+      '202':
+        description: Task was successfully deleted
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              _id: 61b01bd0b3d751fd870ea32a
+              name: Test Task 1
+              employee: 61af58d01ff9ff292094990d
+              deadline: '2021-12-17'
+              completed: 'false'
+              createdAt: '2021-12-07T13:53:35.034Z'
+              updatedAt: '2021-12-07T13:53:35.034Z'
+              __v: 0
+              isExpired: 'false'
+              id: 61b01bd0b3d751fd870ea32a
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                errors:
+                  - value: id_12
+                    msg: Id is invalid. Try again.
+                    param: id
+                    location: params
+      '404':
+        description: Task not found
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              message: Task not found!
+      '500':
+        $ref: '#/components/responses/ServerError'
+  patch:
+    summary: Change completed attribute
+    tags:
+      - Tasks
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              completed:
+                type: boolean
+          example:
+            completed: 'true'
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          required: true
+          description: Task id
+    responses:
+      '200':
+        description: Complteted attribute is changed
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              _id: 61b027b3b38d1331dff192c
+              name: Test Task Postman
+              employee: 61af58d01ff9ff292094990d
+              deadline: '2022-12-20'
+              completed: 'true'
+              createdAt: '2021-12-08T03:31:23.772Z'
+              updatedAt: '2021-12-08T04:41:52.596Z'
+              __v: 0
+              isExpired: 'false'
+              id: 61b0270b3b38d1331dff192c
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                errors:
+                  - msg: You must specify completed value.
+                    param: completed
+                    location: body
+      '404':
+        description: Task not found
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              message: Task not found!
+      '500':
+        $ref: '#/components/responses/ServerError'
+/task:
+  post:
+    summary: Create a new task
+    tags:
+      - Tasks
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties: null
+            name:
+              type: string
+            employee:
+              type: string
+            deadline:
+              type: string
+            example:
+              name: Test Task Swagger
+              employee: 61ae4955c806c23c834326df
+              deadline: '2030-12-20'
+    responses:
+      '201':
+        description: Task was successfully created
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: Test Task Postman
+              employee: 61af58d01ff9ff292094990d
+              deadline: '2022-12-20'
+              completed: 'false'
+              _id: 61b0270b3b38d1331dff192c
+              createdAt: '2021-12-08T03:31:23.772Z'
+              updatedAt: '2021-12-08T03:31:23.772Z'
+              __v: 0
+              isExpired: 'false'
+              id: 61b0270b3b38d1331dff192c
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                errors:
+                  - msg: Please specify a name for the task.
+                    param: name
+                    location: body
+                  - value: ''
+                    msg: Task name should be at least 4 characters long.
+                    param: name
+                    location: body
+      '404':
+        description: Employee not found
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              message: Employee not found
+      '500':
+        $ref: '#/components/responses/ServerError'

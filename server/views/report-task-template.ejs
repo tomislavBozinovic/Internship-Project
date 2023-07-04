@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    table {
+      border-collapse: collapse;
+      align-items: center;
+      text-align: center;
+      margin: auto;
+      width: 100%;
+      padding: 10px;
+    }
+
+    th {
+      border: 1px solid black;
+      font-weight: bolder;
+      font-size: 12px;
+    }
+
+    td {
+      border: 1px solid black;
+      font-size: 10px;
+      height: 50px;
+    }
+
+    body {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .header {
+      text-align: center;
+      font-weight: bold;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    .generatedOn {
+      text-align: right;
+      font-size: 10px;
+    }
+
+    .employee-info {
+      font-size: 10px;
+    }
+
+    .task-information {
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div>
+      <div class="employeeDetails">
+        <h2 class="header"> Employee Report </h2>
+        <p class="generatedOn">
+          Generated on: <%= new Date().toLocaleDateString() %>
+        </p>
+      </div>
+      <hr>
+      <div>
+        <h4>Employee Information:</h4>
+        <div class="employee-info">
+          <p>Name: <%= employee.name %>
+          </p>
+          <p>Age: <%= employee.age %>
+          </p>
+          <p>Email: <%= employee.email %>
+          </p>
+          <p>Phone: <%= employee.phone %>
+          </p>
+          <p>Pet: <%= employee.pet %>
+          </p>
+        </div>
+        <hr>
+        <h4 class="task-information">
+          <%= employee.name %> Tasks
+            for date <%= date %>
+        </h4>
+        <div class="task-table">
+          <table>
+            <tr>
+              <th>Task Description</th>
+              <th>Deadline</th>
+              <th>Completed</th>
+              <th>Expired</th>
+            </tr>
+            <% employeeTasks.forEach((task) => { %>
+              <tr>
+                <td>
+                  <%= task.name %>
+                </td>
+                <td>
+                  <%= task.deadline %>
+                </td>
+                <td>
+                  <%= task.completed ? 'Yes' : 'No' %>
+                </td>
+                <td>
+                  <%= task.isExpired ? 'Yes' : 'No' %>
+                </td>
+              </tr>
+              <% }); %>
+          </table>
+        </div>
+      </div>
+</body>
+</html>

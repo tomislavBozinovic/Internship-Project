@@ -1,0 +1,162 @@
+components:
+  schemas:
+    Eployee:
+      type: object
+      required:
+        - name
+      properties:
+        _id:
+          type: string
+          description: The auto-generated id of the employee
+        name:
+          type: string
+          description: The employee name
+        createdAt:
+          type: string
+          description: timestamp - auto-generated value
+        updatedAt:
+          type: string
+          description: timestamp - auto-generated value
+        __v:
+          type: integer
+          description: versionKey - auto-generated value (mongoose)
+      example:
+        _id: 61a7340e0981fb44ede593d2
+        name: Tomislav Bozinovic
+        createdAt: '2021-12-01T08:36:30.580Z'
+        updatedAt: '2021-12-01T08:36:30.580Z'
+        __v: 0
+  responses:
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Something went wrong.
+tags:
+  name: Employees
+  description: The employees managing API
+/employee:
+  get:
+    summary: Returns the list of all employees
+    tags:
+      - Employees
+    responses:
+      '200':
+        description: The list of the employees
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                totalResults:
+                  type: number
+                  example: 1
+                employees:
+                  type: array
+                  example:
+                    - _id: 61a7340e0981fb44ede593d2
+                      name: Tomislav Bozinovic
+                      createdAt: '2021-12-01T08:36:30.580Z'
+                      updatedAt: '2021-12-01T08:36:30.580Z'
+                      __v: 0
+      '500':
+        $ref: '#/components/responses/ServerError'
+  post:
+    summary: Create new employee
+    tags:
+      - Employees
+    requestBody:
+      required: true
+      description: Please provide employee name
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+            example:
+              name: Test Employee
+    responses:
+      '201':
+        description: The employee was successfully created
+        content:
+          application/json:
+            schema:
+              type: objectt
+            example:
+              name: EmployeeTest
+              _id: 61af6519d67fdcc1d9cd117b
+              createdAt: '2021-12-07T13:43:53.602Z'
+              updatedAt: '2021-12-07T13:43:53.602Z'
+              __v: 0
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                errors:
+                  - value: '@'
+                    msg: Name must be at least 2 characters long.
+                    param: name
+                    location: body
+                  - value: '@'
+                    msg: Name should not contain numbers or special characters.
+                    param: name
+                    location: body
+      '500':
+        $ref: '#/components/responses/ServerError'
+'/employee/{id}':
+  delete:
+    summary: Remove the employee by id
+    tags:
+      - Employees
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          required: true
+          description: The employee id
+    responses:
+      '202':
+        description: The employee was successfully deleted
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              _id: 61af675fa6a7e727b6db3f78
+              name: Test Employee
+              createdAt: '2021-12-07T13:53:35.034Z'
+              updatedAt: '2021-12-07T13:53:35.034Z'
+              __v: 0
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                errors:
+                  - value: '1'
+                    msg: Id is invalid. Try again.
+                    param: id
+                    location: params
+      '404':
+        description: The employee was not found
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              message: Employee not found.
+      '500':
+        $ref: '#/components/responses/ServerError'
